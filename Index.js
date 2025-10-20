@@ -61,11 +61,24 @@ app.post('/api/users', (req, res) => {
             }
 
             res.status(201).json({ Message: 'User added successfully',});
-        }    
+        }
     );
+});
 
-    
-    
-}});
-
-
+//PUT
+app.put('/api/users/:id', (req, res) => {
+    const userId = req.params.id;
+    const { nama, nim, kelas } = req.body;
+    db.query(
+        'UPDATE mahasiswa SET nama = ?, nim = ?, kelas = ? WHERE id = ?',
+        [nama, nim, kelas, userId],
+        (err, result) => {
+            if (err) {
+                console.error('Error updating user:', err);
+                res.status(500).send('Database error');
+                return;
+            }
+            res.json({ Message: 'User updated successfully' });
+        }
+    );
+});
