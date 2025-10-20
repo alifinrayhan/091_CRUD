@@ -42,3 +42,30 @@ app.get('/api/users', (req, res) => {
 
     });
 });
+
+//POST
+app.post('/api/users', (req, res) => {
+    const { nama, nim, kelas, prodi } = req.body;
+
+    if (!nama || !nim || !kelas) {
+        return res.status(400).json({ Message: 'nama, nim, dan kelas wajib diisi' });
+    
+    db.query (
+        'INSERT INTO mahasiswa (nama, nim, kelas) VALUES (?, ?, ?)',
+        [nama, nim, kelas],
+        (err, result) => {
+            if (err) {
+                console.error('Error adding user:', err);
+                res.status(500).send('Database error');
+                return;
+            }
+
+            res.status(201).json({ Message: 'User added successfully',});
+        }    
+    );
+
+    
+    
+}});
+
+
