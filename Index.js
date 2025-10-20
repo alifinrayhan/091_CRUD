@@ -49,7 +49,7 @@ app.post('/api/users', (req, res) => {
 
     if (!nama || !nim || !kelas) {
         return res.status(400).json({ Message: 'nama, nim, dan kelas wajib diisi' });
-    
+    }
     db.query (
         'INSERT INTO mahasiswa (nama, nim, kelas) VALUES (?, ?, ?)',
         [nama, nim, kelas],
@@ -62,7 +62,10 @@ app.post('/api/users', (req, res) => {
 
             res.status(201).json({ Message: 'User added successfully',});
         }
+
     );
+
+
 });
 
 //PUT
@@ -82,3 +85,16 @@ app.put('/api/users/:id', (req, res) => {
         }
     );
 });
+
+//DELETE
+app.delete('/api/users/:id', (req, res) => {
+    const userId = req.params.id;
+    db.query('DELETE FROM mahasiswa WHERE id = ?', [userId], (err, result) => {
+        if (err) {
+            console.error('Error deleting user:', err);
+            res.status(500).send('Database error');
+            return;
+        }
+        res.json({ Message: 'User deleted successfully' });
+    });
+}); 
